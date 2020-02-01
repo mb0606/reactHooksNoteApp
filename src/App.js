@@ -1,15 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
+import Note from "./Note";
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-function App() {
 
-  const [notes, setNotes] = useState([]);
+const notesReducer = (state, action) => {
+  switch (action.type) {
+    case 'FETCH_NOTES':
+      console.log("fetch", action.notes)
+      return action.notes;
+    case 'ADD_NOTE':
+      console.log(state);
+      return [...state, { title: action.title, body: action.body }];
+    case 'REMOVE_NOTE':
+      return state.filter((note) => note.title !== action.title);
+    default:
+      return state;
+  }
+}
+
+
+function App() {
+  const [notes, dispatch] = useReducer(notesReducer, []);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
 
   useEffect(() => {
     // good for fetch data
-    const notesData = JSON.parse(localStorage.getItem('notes'));
-    if (notesData) setNotes(notesData);
+    const notes = JSON.parse(localStorage.getItem('notes'));
+    if (notes) dispatch({ type: "FETCH_NOTES", notes: notes });
     console.log("will only run once")
   }, [])
 
@@ -20,16 +37,17 @@ function App() {
 
   const addNote = (e) => {
     e.preventDefault();
-    setNotes([
-      ...notes,
-      { title, body }
-    ])
+    dispatch({
+      type: "ADD_NOTE", title, body
+    })
     setTitle('');
     setBody('');
   }
 
   const removeNote = (title) => {
-    setNotes(notes.filter((note) => note.title !== title));
+    dispatch({
+      type: "REMOVE_NOTE", title
+    })
   }
   return (
     <Container>
@@ -38,10 +56,10 @@ function App() {
         <Col xs={6}><h1>Notes</h1>
           <Form onSubmit={addNote}>
             {notes && notes.map((note) => (
-              <div key={note.title}>
-                <h4 onClick={() => removeNote(note.title)}>{note.title}</h4>
-                <p>{note.body}</p>
-              </div>
+              <Note key={note.title} title={note.title}
+                body={note.body}
+                removeNote={removeNote}
+              />
             ))}
             <Form.Group >
               <Form.Label>Add Note</Form.Label>
