@@ -1,8 +1,10 @@
 
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useState, useContext } from 'react';
 import { Form, Button } from 'react-bootstrap';
+import NotesContext from "../context/notes-context"
 
-const NoteForm = ({ dispatch }) => {
+const NoteForm = () => {
+    const { dispatch } = useContext(NotesContext);
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
 

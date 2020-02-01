@@ -21,22 +21,20 @@ function App() {
     console.log("will only run once")
   }, [])
 
-  const removeNote = (title) => {
-    dispatch({
-      type: "REMOVE_NOTE", title
-    })
-  }
+
   return (
-    <Container>
-      <Row>
-        <Col></Col>
-        <Col xs={6}><h1>Notes</h1>
-          <NoteList notes={notes} removeNote={removeNote} />
-          <NoteForm dispatch={dispatch} />
-        </Col>
-        <Col></Col>
-      </Row>
-    </Container>
+    <NotesContext.Provider value={{ notes, dispatch }}>
+      <Container>
+        <Row>
+          <Col></Col>
+          <Col xs={6}><h1>Notes</h1>
+            <NoteList />
+            <NoteForm />
+          </Col>
+          <Col></Col>
+        </Row>
+      </Container>
+    </NotesContext.Provider>
   );
 }
 

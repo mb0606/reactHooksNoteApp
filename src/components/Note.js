@@ -1,12 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
+import NotesContext from "../context/notes-context"
 
-const Note = ({ title, body, removeNote }) => {
+const Note = ({ title, body }) => {
+    const { dispatch } = useContext(NotesContext);
     useEffect(() => {
         console.log("Setting up effect");
         return () => {
             console.log('Cleaning up effect');
         }
     }, [])
+
+    const removeNote = (title) => {
+        dispatch({
+            type: "REMOVE_NOTE", title
+        })
+    }
 
     return (
         <div >
