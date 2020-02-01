@@ -1,25 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-
+import React, { useState } from 'react';
+import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 function App() {
+  const [notes, setNotes] = useState([]);
+  const [title, setTitle] = useState('');
+
+  const addNote = (e) => {
+    e.preventDefault();
+    setNotes([
+      ...notes,
+      { title }
+    ])
+    setTitle('');
+  }
+
+  const removeNote = (title) => {
+    setNotes(notes.filter((note) => note.title !== title));
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <Row>
+        <Col></Col>
+        <Col xs={6}><h1>Notes</h1>
+          <Form onSubmit={addNote}>
+            {notes.map((note) => (
+              <div key={note.title}>
+                <h4 onClick={() => removeNote(note.title)}>{note.title}</h4>
+              </div>
+            ))}
+            <Form.Group >
+              <Form.Label>Add Note</Form.Label>
+              <Form.Control
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </Form.Group>
+            <Button variant="primary" type="submit">
+              Add Note
+            </Button>
+          </Form>
+
+        </Col>
+        <Col></Col>
+      </Row>
+    </Container>
   );
 }
 
