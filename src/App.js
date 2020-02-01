@@ -3,14 +3,16 @@ import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 function App() {
   const [notes, setNotes] = useState([]);
   const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
 
   const addNote = (e) => {
     e.preventDefault();
     setNotes([
       ...notes,
-      { title }
+      { title, body }
     ])
     setTitle('');
+    setBody('');
   }
 
   const removeNote = (title) => {
@@ -25,6 +27,7 @@ function App() {
             {notes.map((note) => (
               <div key={note.title}>
                 <h4 onClick={() => removeNote(note.title)}>{note.title}</h4>
+                <p>{note.body}</p>
               </div>
             ))}
             <Form.Group >
@@ -32,6 +35,13 @@ function App() {
               <Form.Control
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+              />
+
+              <Form.Control
+                as="textarea"
+                rows="3"
+                value={body}
+                onChange={(e) => setBody(e.target.value)}
               />
             </Form.Group>
             <Button variant="primary" type="submit">
